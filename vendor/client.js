@@ -1,7 +1,14 @@
 'use strict';
+const io = require('socket.io-client');
+const capURL = 'http://localhost:3000/cap';
+
+const capServer = io.connect(capURL);
+
 require('dotenv').config({ path: '../.env' });
 const storeName = process.env.STORENAME;
 const faker = require('faker');
+
+const order = new Vendor();
 
 class Vendor {
   constructor() {
@@ -19,15 +26,10 @@ class Vendor {
     return entry;
   }
 }
-
-function thankYou(payload) {
-
+capServer.on('delivered', (payload) => {
   console.log(`VENDOR: Thank you for delivering ${payload.payload.orderID}`);
-  console.log(`time: ${new Date().toISOString()}`);
-  console.log(payload);
-}
+});
 
-module.exports = {
-  Vendor,
-  thankYou,
-};
+setInterval(() => {
+  capServer.emit('pick-up', { payload: order.create() });
+}, 5000);
