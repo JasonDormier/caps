@@ -40,7 +40,7 @@
  
 ### UML
 
-![image](assets/uml.jpg)
+![image](assets/uml.jpg) 
 
 ### Collaborators
 * Jason Quaglia
